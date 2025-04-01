@@ -1,0 +1,18 @@
+services:
+  vpn:
+    container_name: vpn
+    build: .
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    volumes:
+      - ./dev.ovpn:/vpn/config.ovpn
+      - ./pass.txt:/vpn/pass.txt
+      - ./sshd_config:/etc/ssh/sshd_config
+    networks:
+      - bridge_vpn
+    ports:
+      - "10022:22"
+networks:
+  bridge_vpn:
