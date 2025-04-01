@@ -23,3 +23,9 @@ Para abrir un navegador con el proxy SOCKS5, se puede usar el siguiente comando 
 ```
 
 Recuerda que el puerto debe coincidir con el que se configuró en el contenedor SOCKS5.
+
+añadir nameserver a /etc/resolv.conf
+
+```bash
+docker compose -f compose.dev.yaml up -d
+docker compose -f compose.dev.yaml exec vpn bash -c "echo 'nameserver 8.8.8.8' >> /etc/resolv.conf && echo 'nameserver 1.1.1.1' >> /etc/resolv.conf"
