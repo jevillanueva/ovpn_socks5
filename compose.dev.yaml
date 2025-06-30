@@ -1,6 +1,6 @@
 services:
-  vpn:
-    container_name: vpn
+  vpn_dev:
+    container_name: vpndev
     build: .
     cap_add:
       - NET_ADMIN
@@ -8,11 +8,52 @@ services:
       - /dev/net/tun
     volumes:
       - ./dev.ovpn:/vpn/config.ovpn
-      - ./pass.txt:/vpn/pass.txt
+      - ./pass_dev.txt:/vpn/pass.txt
       - ./sshd_config:/etc/ssh/sshd_config
+    # network_mode: host  
     networks:
       - bridge_vpn
     ports:
       - "10022:22"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+  vpn_stg:
+    container_name: vpnstg
+    build: .
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    volumes:
+      - ./stg.ovpn:/vpn/config.ovpn
+      - ./pass_stg.txt:/vpn/pass.txt
+      - ./sshd_config:/etc/ssh/sshd_config
+    networks:
+      - bridge_vpn
+    ports:
+      - "10023:22"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+  vpn_prod:
+    container_name: vpnprod
+    build: .
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun
+    volumes:
+      - ./prod.ovpn:/vpn/config.ovpn
+      - ./pass_prod.txt:/vpn/pass.txt
+      - ./sshd_config:/etc/ssh/sshd_config
+    networks:
+      - bridge_vpn
+    ports:
+      - "10024:22"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
 networks:
   bridge_vpn:
+    driver: bridge
